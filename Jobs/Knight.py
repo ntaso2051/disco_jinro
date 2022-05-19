@@ -8,7 +8,7 @@ class Knight(Job):
 
     def night_act(self, target):
         target.set_covered(True)
-        return 'を護ります。'
+        return target.get_name() + ' さんを護ります。'
 
     def night_message(self):
         return '護りたい人を一人指定してください。'

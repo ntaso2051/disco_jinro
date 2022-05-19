@@ -9,7 +9,7 @@ class Werewolf(Job):
     def night_act(self, target):
         if not target.is_covered():
             target.set_dead(True)
-        return target.get_name() + 'を襲います。'
+        return target.get_name() + ' さんを襲います。'
 
     def night_message(self):
         return '襲いたい相手を一人選んでください。'
