@@ -19,6 +19,7 @@ python3 run.py
 3. `./run.py`の`job_setting`に`{追加したい役職の英語名}:0`を追記
 4. `./run.py`の`job_name`に`{追加したい役職の英語名}:{追加したい役職の日本語名}`を追記
 5. `./run.py`の`job_priority`に`{追加したい役職の英語名}:{追加したい役職の優先度}`を追記。ここでいう追加したい役職の優先度は、例えば、人狼より先に行動したい人なら人狼の優先度より小さい数字に、人狼より後に行動したい人であれば人狼の優先度より大きい数字にすればよい。
-6. 1で作ったpythonファイルに`Villager.py`をコピペしたものを貼り付け、クラス名、`self.name`, `self.display_name`を書き換える。
-7. `night_act(self, target)`にコードを書く。`night_message`に行動した後に送りたいメッセージを書く。
-8. できた！
+6. `./Player.py`に条件文を追加。
+7. 1で作ったpythonファイルに`Villager.py`をコピペしたものを貼り付け、クラス名、`self.name`, `self.display_name`を書き換える。
+8. `night_act(self, target)`にコードを書く。`night_message`に行動した後に送りたいメッセージを書く。
+9. できた！
