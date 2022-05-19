@@ -1,4 +1,4 @@
-# 人狼ゲーム on discord
+# 人狼ゲーム on discord (現在開発中)
 
 ## 概要
 - discord にて人狼ゲームのゲームマスターをしてくれるbotです。
