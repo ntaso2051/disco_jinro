@@ -7,7 +7,7 @@ class Werewolf(Job):
         self.display_name = '人狼'
 
     def night_act(self, target):
-        if target.is_covered():
+        if not target.is_covered():
             target.set_dead(True)
         return target.get_name() + 'を襲います。'
 

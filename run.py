@@ -80,9 +80,22 @@ async def on_message(message):
         print(js)
         print(game_members)
 
+        villager_ids = []
+
         for i in range(len(game_members)):
             p = Player(game_members[i][0], game_members[i][1], js[i])
             players.append(p)
+            if not (p.get_is_wolf()) and p.get_job_name() != 'Seer':
+                villager_ids.append(i)
+
+        print(villager_ids)
+        random.shuffle(villager_ids)
+        for p in players:
+            if p.get_job_name() == 'Seer':
+                text += '\n 占い師に送るやつ：'+p.act(players[villager_ids[0]])
+                print(text)
+                # TODO: 本番ではコメントアウト外す
+                # await client.get_user(p.get_id()).send(text)
 
         # debug
         text += '\n debug'
@@ -158,6 +171,7 @@ async def on_message(message):
         if target_count >= len(players):
             target_count = 0
             text = ''
+            attacked_player = act_stack[0][0]
             for i in range(len(act_stack)):
                 for j in range(len(act_stack)):
                     if job_priority[act_stack[i][0].get_job_name()] > job_priority[act_stack[j][0].get_job_name()]:
@@ -169,19 +183,21 @@ async def on_message(message):
                 print(act[0].get_name() + 'が' +
                       act[1].get_name() + 'にアクションしました')
                 act[0].set_acted(True)
+                if act[0].get_job_name() == 'Werewolf':
+                    attacked_player = act[1]
                 await client.get_user(act[0].get_id()).send(text)
                 # print(act[1].get_name())
             act_stack.clear()
             print(text)
             time.sleep(3)
             await message.channel.send('朝が来ました。')
-            text = '昨夜は '
+            text = ''
             for p in players:
                 p.morning()
-                if p.is_dead():
-                    text += p.get_name() + ' さんが死にました。'
-            if text == '昨夜は':
-                text += '誰も死にませんでした'
+            if attacked_player.is_dead():
+                text += '昨夜は ' + attacked_player.get_name() + ' さんが死にました。'
+            else:
+                text += '昨夜は誰も死にませんでした'
             await message.channel.send(text)
 
 # 終了処理
