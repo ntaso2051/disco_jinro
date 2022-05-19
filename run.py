@@ -206,4 +206,8 @@ async def on_message(message):
     if args[0] == 'inctcnt':
         target_count += 1
         await message.channel.send('Debug用関数です')
+
+    if args[0] == 'help':
+        text = ' ```\ngetm:\n    参加可能メンバーを表示\nsetp <name1> <name2> ... <nameN>:\n    参加メンバーを設定 引数は getm で得た名前\nsetj <job1>:<num1> <job2>:<num2> ... <jobN>:<numN>:\n    役職を設定 引数は<役職の名前>:<その役職の人数>\ngamestart:\n    役職を割り振ってゲームスタート\ngetjob:\n    自分の役職を確認 dmでbotから役職が届く\nvote <name>:\n    引数の名前の人に投票する\nvotend:\n    投票を締め切って投票結果を表示\nact:\n    夜のアクションをする dmで次の指示が届く\ntarget <name>:\n    botに対してdmで送る \n    引数の名前の人に対して夜のアクションを起こす e.g. 人狼であればその人を噛む 狩人であればその人を護る\n    全員のアクションが終わると順番にアクションが実行され朝が来る\nhelp:\n    このメッセージを表示```'
+        await message.channel.send(text)
 client.run(TOKEN)
