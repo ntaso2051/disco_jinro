@@ -17,10 +17,10 @@ players = []
 all_members = []
 game_members = []
 
-jobs = ['Werewolf', 'Seer', 'Villager', 'Knight']
-job_setting = {'Werewolf': 0, 'Seer': 0, 'Villager': 0, 'Knight': 0}
-job_name = {'Werewolf': '人狼', 'Seer': '占い師', 'Villager': '村人', 'Knight': '狩人'}
-job_priority = {'Werewolf': 0, 'Seer': 1, 'Villager': 2, 'Knight': 3}
+jobs = ['Werewolf', 'Seer', 'Villager', 'Knight', 'Madman']
+job_setting = {'Werewolf': 0, 'Seer': 0, 'Villager': 0, 'Knight': 0, 'Madman':0}
+job_name = {'Werewolf': '人狼', 'Seer': '占い師', 'Villager': '村人', 'Knight': '狩人', 'Madman':'狂人'}
+job_priority = {'Werewolf': 0, 'Seer': 1, 'Villager': 2, 'Knight': 3, 'Madman':4}
 
 act_stack = []
 target_count = 0
@@ -92,7 +92,7 @@ async def on_message(message):
         random.shuffle(villager_ids)
         for p in players:
             if p.get_job_name() == 'Seer':
-                text += '\n 占い師に送るやつ：'+p.act(players[villager_ids[0]])
+                text += '\n 占い師に送るやつ'+p.act(players[villager_ids[0]])
                 print(text)
                 # TODO: 本番ではコメントアウト外す
                 # await client.get_user(p.get_id()).send(text)
@@ -105,10 +105,10 @@ async def on_message(message):
         await message.channel.send(text)
 
     if args[0] == 'getjob':
-        text = 'あなたの役職は '
+        text = 'あなたの役職は　'
         for p in players:
             if message.author.id == p.get_id():
-                text += p.get_job() + ' です。'
+                text += p.get_job() + '　です。'
         await message.author.send(text)
 
     if args[0] == 'vote':
@@ -118,7 +118,7 @@ async def on_message(message):
                 for p2 in players:
                     if args[1] == p2.get_name() and not(p.is_voted()):
                         p.vote(p2)
-                        text += p.get_name() + ' さんは ' + p2.get_name() + ' さんに投票しました。'
+                        text += p.get_name() + ' さんは ' + p2.get_name() + '　さんに投票しました。'
 
         await message.channel.send(text)
 
@@ -211,8 +211,16 @@ async def on_message(message):
                     else:
                         villager_cnt += 1
             if wolf_cnt >= villager_cnt:
+                text += '\n勝者:'
+                for p in players:
+                    if p.get_is_side() == 0:                            
+                        text += p.getname() + '\n'
                 text += '人狼の勝ちです。'
             if wolf_cnt == 0:
+                text += '\n勝者:'
+                for p in players:
+                    if p.get_is_side() == 0:
+                        text += p.get_name() + '\n'
                 text += '村人の勝ちです。'
             await message.channel.send(text)
 
@@ -221,9 +229,9 @@ async def on_message(message):
 
     if args[0] == 'inctcnt':
         target_count += 1
-        await message.channel.send('Debug用関数です')
+        await message.channel.send('Debug用関数です。')
 
     if args[0] == 'help':
-        text = ' ```\ngetm:\n    参加可能メンバーを表示\nsetp <name1> <name2> ... <nameN>:\n    参加メンバーを設定 引数は getm で得た名前\nsetj <job1>:<num1> <job2>:<num2> ... <jobN>:<numN>:\n    役職を設定 引数は<役職の名前>:<その役職の人数>\ngamestart:\n    役職を割り振ってゲームスタート\ngetjob:\n    自分の役職を確認 dmでbotから役職が届く\nvote <name>:\n    引数の名前の人に投票する\nvotend:\n    投票を締め切って投票結果を表示\nact:\n    夜のアクションをする dmで次の指示が届く\ntarget <name>:\n    botに対してdmで送る \n    引数の名前の人に対して夜のアクションを起こす e.g. 人狼であればその人を噛む 狩人であればその人を護る\n    全員のアクションが終わると順番にアクションが実行され朝が来る\nhelp:\n    このメッセージを表示```'
+        text = ' ```\ngetm:\n    参加可能メンバーを表示\nsetp <name1> <name2> ... <nameN>:\n    参加メンバーを設定 引数は getm で得た名前\nsetj <job1>:<num1> <job2>:<num2> ... <jobN>:<numN>:\n    役職を設定 引数は<役職の名前>:<その役職の人数>\ngamestart:\n    役職を割り振ってゲームスタート\ngetjob:\n    自分の役職を確認 dmでbotから役職が届く\nvote <name>:\n    引数の名前の人に投票する\nvotend:\n    投票を締め切って投票結果を表示\nact:\n    夜のアクションをする dmで次の指示が届く\ntarget <name>:\n    botに対してdmで送る \n    引数の名前の人に対して夜のアクションを起こす e.g. 人狼であればその人を噛む 狩人であればその人を護る\n    全員のアクションが終わると順番にアクションが実行され朝が来る\nhelp:\n   このメッセージを表示```'
         await message.channel.send(text)
 client.run(TOKEN)

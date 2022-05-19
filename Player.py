@@ -2,6 +2,7 @@ from Jobs.Seer import Seer
 from Jobs.Villager import Villager
 from Jobs.Werewolf import Werewolf
 from Jobs.Knight import Knight
+from Jobs.Madman import Madman
 
 
 class Player():
@@ -12,15 +13,23 @@ class Player():
         if jname == 'Villager':
             self.job = Villager()
             self.is_wolf = False
+            self.is_side = 0
         if jname == 'Werewolf':
             self.job = Werewolf()
             self.is_wolf = True
+            self.is_side = 1
         if jname == 'Seer':
             self.job = Seer()
             self.is_wolf = False
+            self.is_side = 0
         if jname == 'Knight':
             self.job = Knight()
             self.is_wolf = False
+            self.is_side = 0
+        if jname == 'Madman':
+            self.job = Madman()
+            self.is_wolf = False    
+            self.is_side = 1
 
     def act(self, target):
         self.acted = True
@@ -40,6 +49,9 @@ class Player():
 
     def get_is_wolf(self):
         return self.is_wolf
+    
+    def get_is_side(self):
+        return self.is_side
 
     def is_voted(self):
         return self.voted
