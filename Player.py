@@ -1,8 +1,10 @@
+from re import T
 from Jobs.Seer import Seer
 from Jobs.Villager import Villager
 from Jobs.Werewolf import Werewolf
 from Jobs.Knight import Knight
 from Jobs.Madman import Madman
+from Jobs.Bakery import Bakery
 
 
 class Player():
@@ -10,26 +12,37 @@ class Player():
         self.id = id
         self.name = name
         self.reset()
+        self.dead = False #ここで定義してしまった
         if jname == 'Villager':
             self.job = Villager()
             self.is_wolf = False
             self.is_side = 0
+            self.is_bakery = False #パン屋か否か判定するパラメータ
         if jname == 'Werewolf':
             self.job = Werewolf()
             self.is_wolf = True
             self.is_side = 1
+            self.is_bakery = False
         if jname == 'Seer':
             self.job = Seer()
             self.is_wolf = False
             self.is_side = 0
+            self.is_bakery = False
         if jname == 'Knight':
             self.job = Knight()
             self.is_wolf = False
             self.is_side = 0
+            self.is_bakery = False
         if jname == 'Madman':
             self.job = Madman()
             self.is_wolf = False    
             self.is_side = 1
+            self.is_bakery = False
+        if jname == 'Bakery':
+            self.job = Bakery()
+            self.is_wolf = False
+            self.is_side = 0
+            self.is_bakery = True
 
     def act(self, target):
         self.acted = True
@@ -49,6 +62,10 @@ class Player():
 
     def get_is_wolf(self):
         return self.is_wolf
+    
+    #パン屋か否かを判定するパラメータを返す関数
+    def get_is_bakery(self):
+        return self.is_bakery
     
     def get_is_side(self):
         return self.is_side

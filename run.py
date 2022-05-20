@@ -17,13 +17,14 @@ players = []
 all_members = []
 game_members = []
 
-jobs = ['Werewolf', 'Seer', 'Villager', 'Knight', 'Madman']
-job_setting = {'Werewolf': 0, 'Seer': 0, 'Villager': 0, 'Knight': 0, 'Madman':0}
-job_name = {'Werewolf': '人狼', 'Seer': '占い師', 'Villager': '村人', 'Knight': '狩人', 'Madman':'狂人'}
-job_priority = {'Werewolf': 0, 'Seer': 1, 'Villager': 2, 'Knight': 3, 'Madman':4}
+jobs = ['Werewolf', 'Seer', 'Villager', 'Knight', 'Madman','Bakery']
+job_setting = {'Werewolf': 0, 'Seer': 0, 'Villager': 0, 'Knight': 0, 'Madman':0, 'Bakery':0}
+job_name = {'Werewolf': '人狼', 'Seer': '占い師', 'Villager': '村人', 'Knight': '狩人', 'Madman':'狂人', 'Bakery':'パン屋'}
+job_priority = {'Werewolf': 0, 'Seer': 1, 'Villager': 2, 'Knight': 3, 'Madman':4, 'Bakery':5}
 
 act_stack = []
 target_count = 0
+bakery_cnt = True #パン屋の生死判定を決定する変数
 
 
 @client.event
@@ -190,6 +191,15 @@ async def on_message(message):
             act_stack.clear()
             print(text)
             time.sleep(3)
+
+            #パン屋の生死判定
+            global bakery_cnt
+            for p in players:
+                if (p.get_is_bakery() and p.is_dead()):
+                    bakery_cnt = False
+            if bakery_cnt:
+                await message.channel.send('パン屋さんが美味しいパンを作ってくれました。')
+
             await message.channel.send('朝が来ました。')
             text = ''
             for p in players:
