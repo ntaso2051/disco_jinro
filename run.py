@@ -24,7 +24,7 @@ job_priority = {'Werewolf': 0, 'Seer': 1, 'Villager': 2, 'Knight': 3, 'Madman':4
 
 act_stack = []
 target_count = 0
-bakery_cnt = True #パン屋の生死判定を決定する変数
+bakery_flag = True #パン屋の生死判定を決定する変数
 
 
 @client.event
@@ -193,11 +193,11 @@ async def on_message(message):
             time.sleep(3)
 
             #パン屋の生死判定
-            global bakery_cnt
+            global bakery_flag
             for p in players:
-                if (p.get_is_bakery() and p.is_dead()):
-                    bakery_cnt = False
-            if bakery_cnt:
+                if (p.get_job_name() == 'Bakery' and p.is_dead()):
+                    bakery_flag = False
+            if bakery_flag:
                 await message.channel.send('パン屋さんが美味しいパンを作ってくれました。')
 
             await message.channel.send('朝が来ました。')
