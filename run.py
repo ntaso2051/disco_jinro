@@ -1,3 +1,4 @@
+from Jobs.Werewolf import Werewolf
 from Player import Player
 from curses import ALL_MOUSE_EVENTS
 import discord
@@ -17,10 +18,10 @@ players = []
 all_members = []
 game_members = []
 
-jobs = ['Werewolf', 'Seer', 'Villager', 'Knight', 'Madman','Bakery']
-job_setting = {'Werewolf': 0, 'Seer': 0, 'Villager': 0, 'Knight': 0, 'Madman':0, 'Bakery':0}
-job_name = {'Werewolf': '人狼', 'Seer': '占い師', 'Villager': '村人', 'Knight': '狩人', 'Madman':'狂人', 'Bakery':'パン屋'}
-job_priority = {'Werewolf': 0, 'Seer': 1, 'Villager': 2, 'Knight': 3, 'Madman':4, 'Bakery':5}
+jobs = ['Werewolf', 'Seer', 'Villager', 'Knight', 'Madman','Bakery', 'Zealot']
+job_setting = {'Werewolf': 0, 'Seer': 0, 'Villager': 0, 'Knight': 0, 'Madman':0, 'Bakery':0, 'Zealot':0}
+job_name = {'Werewolf': '人狼', 'Seer': '占い師', 'Villager': '村人', 'Knight': '狩人', 'Madman':'狂人', 'Bakery':'パン屋', 'Zealot':'狂信者'}
+job_priority = {'Werewolf': 0, 'Seer': 1, 'Villager': 2, 'Knight': 3, 'Madman':4, 'Bakery':5, 'Zealot':6}
 
 act_stack = []
 target_count = 0
@@ -64,12 +65,11 @@ async def on_message(message):
         text = '役職'
         for arg in args:
             tmp = arg.split(':')
-            print(tmp)
             if tmp[0] in jobs:
                 job_setting[tmp[0]] = int(tmp[1])
                 text += '\n - ' + job_name[tmp[0]] + ' : ' + tmp[1] + '人'
         await message.channel.send(text)
-
+    
     if args[0] == 'gamestart':
         js = []
         text = '夜になりました。役職を確認してください。'
@@ -82,21 +82,32 @@ async def on_message(message):
         print(game_members)
 
         villager_ids = []
-
+        werewolf_ids = []
         for i in range(len(game_members)):
             p = Player(game_members[i][0], game_members[i][1], js[i])
             players.append(p)
             if not (p.get_is_wolf()) and p.get_job_name() != 'Seer':
                 villager_ids.append(i)
+            if p.get_is_wolf():
+                werewolf_ids.append(i)
 
         print(villager_ids)
         random.shuffle(villager_ids)
         for p in players:
             if p.get_job_name() == 'Seer':
-                text += '\n 占い師に送るやつ'+p.act(players[villager_ids[0]])
+                text += '\n 占い師に送るやつ:'+p.act(players[villager_ids[0]])
                 print(text)
                 # TODO: 本番ではコメントアウト外す
                 # await client.get_user(p.get_id()).send(text)
+        
+        #狂信が朝に人狼を判別するための処理
+        text += '\n 狂信におくるやつ:'
+        for p in players:
+            if p.get_job_name() == 'Zealot':
+                for i in werewolf_ids:
+                    text += '人狼:'+ players[i].get_name()
+
+
 
         # debug
         text += '\n debug'

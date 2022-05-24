@@ -4,6 +4,7 @@ from Jobs.Werewolf import Werewolf
 from Jobs.Knight import Knight
 from Jobs.Madman import Madman
 from Jobs.Bakery import Bakery
+from Jobs.Zealot import Zealot
 
 
 class Player():
@@ -36,6 +37,10 @@ class Player():
             self.job = Bakery()
             self.is_wolf = False
             self.is_side = 0
+        if jname == 'Zealot':
+            self.job = Zealot()
+            self.is_wolf = False
+            self.is_side = 1
 
     def act(self, target):
         self.acted = True
